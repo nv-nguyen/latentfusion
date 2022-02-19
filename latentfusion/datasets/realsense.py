@@ -125,7 +125,8 @@ class RealsenseDataset(Dataset):
             if not mask_dir.exists():
                 raise ValueError(f"Mask directory {mask_dir!s} does not exist.")
 
-            mask_paths = sorted(mask_dir.glob('*.png'))
+            mask_paths = set(sorted(mask_dir.glob('*.png')))-set(sorted(mask_dir.glob('._*.png')))
+            mask_paths = sorted(mask_paths)
             valid_ids = [int(p.stem) for p in mask_paths]
             depth_paths = [path / 'depth' / p.name for p in mask_paths]
             color_paths = [path / 'color' / p.with_suffix('.jpg').name for p in mask_paths]
